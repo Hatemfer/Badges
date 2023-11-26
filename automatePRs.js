@@ -1,6 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 
-const token = "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";
+const token = "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";
 const owner = "Free-Badgets";
 const repo = "Badges";
 
