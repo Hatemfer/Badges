@@ -1,6 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 
-const token = "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";
+const token = "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";
 const owner = "Free-Badgets";
 const repo = "Badges";
 
@@ -8,7 +8,7 @@ const octokit = new Octokit({ auth: token });
 
 async function createPRs() {
   try {
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 3; i++) {
       // Generate a unique branch name
       const branchName = `branch-${i}`;
 
