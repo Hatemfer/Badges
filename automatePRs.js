@@ -1,4 +1,3 @@
-
 const { Octokit } = require("@octokit/rest");
 
 const token = "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";
@@ -6,35 +5,27 @@ const owner = "Free-Badgets";
 const repo = "Badges";
 
 const octokit = new Octokit({ auth: token });
-const prefix = 'branch-';
-const suffix = 'abcdefghijklmnopqrstuvwxyz1234567890'; // Adding more characters
-
-const generateBranchName = (index) => {
-  const paddedIndex = index.toString().padStart(4, '0');
-  const additionalChars = suffix.substring(0, 36); // Adjust the substring length as needed
-  return `${prefix}${paddedIndex}-${additionalChars}`;
-};
 
 async function createPRs() {
-  const pullRequestURLs = [];
-
   try {
-    for (let i = 1; i <= 2; i++) {
-      const branchName = generateBranchName(i);
+    for (let i = 1; i <= 1024; i++) {
+      // Generate a unique branch name
+      const branchName = `branch-${i}`;
 
+      // Create a new branch
       try {
         await octokit.git.createRef({
           owner,
           repo,
           ref: `refs/heads/${branchName}`,
-          sha: "main",
+          sha: "main", // SHA of the commit to base the branch off of
         });
         console.log(`Branch ${branchName} created`);
       } catch (branchError) {
         console.error(`Error creating branch ${branchName}:`, branchError);
-        continue;
       }
 
+      // Create a pull request
       try {
         const pr = await octokit.pulls.create({
           owner,
@@ -44,24 +35,20 @@ async function createPRs() {
           base: "main",
         });
         console.log(`Pull request #${i} created: ${pr.data.html_url}`);
-        pullRequestURLs.push(pr.data.html_url); 
       } catch (prError) {
         console.error(`Error creating pull request #${i}:`, prError);
-        continue;
       }
-    }
 
-    for (const url of pullRequestURLs) {
+      // Merge the pull request
       try {
-        const pullNumber = url.split("/").pop();
-        await octokit.pulls.merge({
+        const merge = await octokit.pulls.merge({
           owner,
           repo,
-          pull_number: pullNumber,
+          pull_number: i,
         });
-        console.log(`Pull request merged: ${url}`);
+        console.log(`Pull request #${i} merged: ${merge.status}`);
       } catch (mergeError) {
-        console.error(`Error merging pull request ${url}:`, mergeError);
+        console.error(`Error merging pull request #${i}:`, mergeError);
       }
     }
   } catch (loopError) {
