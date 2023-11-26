@@ -8,7 +8,7 @@ const octokit = new Octokit({ auth: token });
 
 async function createPRs() {
   try {
-    for (let i = 1; i <= 1024; i++) {
+    for (let i = 1; i <= 2; i++) {
       // Generate a unique branch name
       const branchName = `branch-${i}`;
 
