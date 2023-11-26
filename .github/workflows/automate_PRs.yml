@@ -24,4 +24,4 @@ jobs:
       - name: Execute Node.js script
         run: node automatePRs.js  # Run your Node.js script here
         env:
-          GITHUB_TOKEN: "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"  # Pass GitHub token for authentication
+          GITHUB_TOKEN: "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"  # Pass GitHub token for authentication
